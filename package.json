@@ -1,0 +1,41 @@
+{
+  "name": "peercassette",
+  "version": "0.0.0",
+  "description": "PeerCast all in one suite for Desktop",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/progre/peercassette.git"
+  },
+  "keywords": [
+    "PeerCast"
+  ],
+  "author": "progre",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/progre/peercassette/issues"
+  },
+  "homepage": "https://github.com/progre/peercassette",
+  "devDependencies": {
+    "browserify": "*",
+    "del": "*",
+    "gulp": "^3.9.0",
+    "gulp-concat": "*",
+    "gulp-espower": "*",
+    "gulp-jade": "*",
+    "gulp-mocha": "*",
+    "gulp-plumber": "*",
+    "gulp-sourcemaps": "*",
+    "gulp-stylus": "*",
+    "gulp-tslint": "*",
+    "gulp-tslint-stylish": "*",
+    "gulp-typescript": "*",
+    "run-sequence": "*",
+    "stream-to-promise": "*",
+    "tsify": "*",
+    "typescript": "*",
+    "vinyl-source-stream": "*"  }
+}
