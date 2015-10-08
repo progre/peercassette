@@ -1,0 +1,29 @@
+ul.media-list
+  li.media(style='margin-top: 0; margin-bottom: 0px', ng-repeat='channel in channels')
+    span.pull-left(style='font-size: 3em; margin: 2px 0 0 0; width: 55px', ng-switch='channel.category')
+      span.glyphicon.glyphicon-heart(style='color: pink;', ng-switch-when='Adult')
+      span.glyphicon.glyphicon-edit(style='color: #fc0;', ng-switch-when='Creating')
+      span.glyphicon.glyphicon-tower(style='color: #999;', ng-switch-when='Shogi')
+      span.glyphicon.glyphicon-wrench(style='color: #654;', ng-switch-when='Engineering')
+      span.glyphicon.glyphicon-bell(style='color: gold;', ng-switch-when='Slot')
+      span.glyphicon.glyphicon-comment(style='color: green;', ng-switch-when='Talk')
+      span.glyphicon.glyphicon-time(style='color: #433;', ng-switch-when='Game/TA')
+      span.glyphicon.glyphicon-link(style='color: #9b1;', ng-switch-when='Game/MMO')
+      span.glyphicon.glyphicon-screenshot(style='color: #4d4;', ng-switch-when='Game/FPS')
+      spna.glyphicon.glyphicon-flag(style='color: #4d4;', ng-switch-when='Game/RTS')
+      span.glyphicon.glyphicon-book(style='color: #943;', ng-switch-when='Game/RPG')
+      span.glyphicon.glyphicon-phone(style='color: #555;', ng-switch-when='Game/Social')
+      span.glyphicon.glyphicon-send(style='color: #469;', ng-switch-when='Game/Other')
+      span.glyphicon.glyphicon-bullhorn(style='color: #8c7;', ng-switch-default)
+    .media-body
+      a(ng-href='{{ !isClickable(channel) ? "" : "channel/" + channel.name }}', target='_self', title='{{ !portConnectable ? "PeerCastの導入後に視聴可能になります" : "" }}')
+        button.btn.btn-default(style='text-align: left; width: 100%; padding-left: 0; padding-right: 0;', ng-disabled='!isClickable(channel)')
+          div(style='margin-left: 12px; margin-right: 12px;')
+            ng-switch(on='channel.id')
+              span(ng-switch-when='00000000000000000000000000000000') {{channel.line1}}
+              b(ng-switch-default) {{channel.line1}}
+            span.label.label-primary(style='margin-left: 10px;', ng-show='channel.favorite') お気に入り
+            br
+            div(style='text-overflow: ellipsis; overflow: hidden;')
+              span(style='margin-left: 1em;') {{channel.line2}}
+              span(style='margin-left: 1em;', ng-show='channel.line3.length > 0') 「{{channel.line3}}」

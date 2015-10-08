@@ -33,9 +33,11 @@
     "gulp-tslint": "*",
     "gulp-tslint-stylish": "*",
     "gulp-typescript": "*",
+    "linq": "^3.0.5",
     "run-sequence": "*",
     "stream-to-promise": "*",
     "tsify": "*",
     "typescript": "*",
-    "vinyl-source-stream": "*"  }
+    "vinyl-source-stream": "*"
+  }
 }
