@@ -1,5 +1,4 @@
-export = Channel;
-class Channel {
+export default class Channel {
     constructor(
         public name = '',
         public id = '00000000000000000000000000000000',

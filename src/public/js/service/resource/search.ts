@@ -1,17 +1,15 @@
-import log4js = require('log4js');
-import Enumerable = require('linq');
-import express = require('express');
-import functions = require('../infrastructure/functions');
-import YPWatcher = require('../infrastructure/ypwatcher');
-
-var logger = log4js.getLogger('server');
+import * as Enumerable from 'linq';
+import * as express from 'express';
+import * as functions from '../../infrastructure/functions';
+import YPWatcher from '../../infrastructure/ypwatcher';
 
 export function controller(ypWatcher: YPWatcher) {
     return {
         index: (req: express.Request, res: express.Response) => {
-            functions.requirePortConnectable(req,
+            functions.requirePortConnectable(
+                req,
                 () => {
-                    var channel = Enumerable.from(ypWatcher.channels)
+                    let channel = Enumerable.from(ypWatcher.channels)
                         .where(x => x.name === req.param('name'))
                         .firstOrDefault();
                     res.send({
@@ -28,7 +26,8 @@ export function controller(ypWatcher: YPWatcher) {
                         ip: '',
                         type: ''
                     });
-                }, () => {
+                },
+                () => {
                     res.send(500);
                 });
         }

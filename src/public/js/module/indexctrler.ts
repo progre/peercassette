@@ -1,18 +1,18 @@
-import Enumerable = require('linq');
-import CookieInfrastructure = require('../infrastructure/cookieinfrastructure');
-import UserInfoRepos = require('../domain/repos/userinforepos');
-import UserInfo = require('../domain/entity/userinfo');
+import * as Enumerable from 'linq';
+import CookieInfrastructure from '../infrastructure/cookieinfrastructure';
+import UserInfoRepos from '../domain/repos/userinforepos';
+import UserInfo from '../domain/entity/userinfo';
 
 export = IndexCtrler;
 var IndexCtrler = [
     '$scope', '$http', '$cookies',
     ($scope: any, $http: ng.IHttpService, $cookies: any) => {
-        var userInfoRepos = new UserInfoRepos(new CookieInfrastructure($cookies));
-        var userInfo = userInfoRepos.get();
+        let userInfoRepos = new UserInfoRepos(new CookieInfrastructure($cookies));
+        let userInfo = userInfoRepos.get();
 
         $http.get('/api/1/channels')
             .then(response => {
-                var data: any = response.data;
+                let data: any = response.data;
                 $scope.portConnectable = data.portConnectable;
                 $scope.channels = Enumerable.from(<any[]>data.channels)
                     .select(x => addPropertiesForView(x, userInfo))
@@ -35,7 +35,7 @@ function addPropertiesForView(x: any, userInfo: UserInfo) {
     if (x.genre === '' && x.desc === '') {
         x.line2 = '';
     } else {
-        var line = [x.genre, x.desc]
+        let line = [x.genre, x.desc]
             .filter(x => x.length > 0)
             .join(' - ');
         x.line2 = '[' + line + ']';

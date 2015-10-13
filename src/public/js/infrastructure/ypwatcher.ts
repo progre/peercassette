@@ -1,17 +1,13 @@
-﻿var Promise: PromiseClass = require('es6-promise').Promise;
-import http = require('http');
-import Enumerable = require('linq');
-import log4js = require('log4js');
-var logger = log4js.getLogger('server');
-import channelsfactory = require('../domain/entity/channelsfactory');
-import Channel = require('../domain/entity/channel');
-import tp = require('../domain/entity/tp');
-import sp = require('../domain/entity/sp');
-import dp = require('../domain/entity/dp');
-import ep = require('../domain/entity/ep');
+﻿import * as Enumerable from 'linq';
+import {getLogger} from 'log4js';
+const logger = getLogger('server');
+import Channel from '../domain/entity/channel';
+import * as tp from '../domain/service/tp';
+import * as sp from '../domain/service/sp';
+import * as dp from '../domain/service/dp';
+import * as ep from '../domain/service/ep';
 
-export = YPWatcher;
-class YPWatcher {
+export default class YPWatcher {
     channels: Channel[] = [];
     ypInfos: Channel[] = [];
     events: Channel[] = [];
@@ -25,19 +21,19 @@ class YPWatcher {
     }
 
     watchYP() {
-        var channels = Enumerable.from(<Channel[]>[]);
-        var ypInfos = Enumerable.from(<Channel[]>[]);
-        var events = Enumerable.from(<Channel[]>[]);
-        var start: number;
-        Promise.cast()
+        let channels = Enumerable.from(<Channel[]>[]);
+        let ypInfos = Enumerable.from(<Channel[]>[]);
+        let events = Enumerable.from(<Channel[]>[]);
+        let start: number;
+        Promise.resolve()
             .then(() => {
                 logger.debug('Start TP Request.');
                 start = Date.now();
                 return get(tp.url(this.localPort));
             })
             .then(body => {
-                var time = Date.now() - start;
-                var result = tp.getChannels(body);
+                let time = Date.now() - start;
+                let result = tp.getChannels(body);
                 channels = channels.concat(result[0]);
                 ypInfos = ypInfos.concat(result[1]);
                 logger.debug('End TP Request. ' + time + 'ms, ' + result[0].length + ' channel(s), ' + result[1].length + ' info(s)');
@@ -47,8 +43,8 @@ class YPWatcher {
                 return get(sp.url(this.localPort));
             })
             .then(body => {
-                var time = Date.now() - start;
-                var result = sp.getChannels(body);
+                let time = Date.now() - start;
+                let result = sp.getChannels(body);
                 channels = channels.concat(result[0]);
                 ypInfos = ypInfos.concat(result[1]);
                 logger.debug('End SP Request. ' + time + 'ms, ' + result[0].length + ' channel(s), ' + result[1].length + ' info(s)');
@@ -58,8 +54,8 @@ class YPWatcher {
                 return get(dp.url());
             })
             .then(body => {
-                var time = Date.now() - start;
-                var result = dp.getChannels(body);
+                let time = Date.now() - start;
+                let result = dp.getChannels(body);
                 channels = channels.concat(result[0]);
                 ypInfos = ypInfos.concat(result[1]);
                 logger.debug('End DP Request. ' + time + 'ms, ' + result[0].length + ' channel(s), ' + result[1].length + ' info(s)');
@@ -69,14 +65,14 @@ class YPWatcher {
                 return get(ep.url());
             })
             .then(body => {
-                var time = Date.now() - start;
-                var result = ep.getChannels(body);
+                let time = Date.now() - start;
+                let result = ep.getChannels(body);
                 ypInfos = ypInfos.concat(result[1]);
                 events = events.concat(result[2]);
                 logger.debug('End EP Request. ' + time + 'ms, ' + result[0].length + ' channel(s), ' + result[1].length + ' info(s)');
 
                 logger.debug('sum is ' + channels.count() + 'channel(s)');
-                channels = channels.orderBy(x => x.uptimeMin);// 新しい順に並べる
+                channels = channels.orderBy(x => x.uptimeMin); // 新しい順に並べる
                 this.channels = channels.toArray();
                 this.ypInfos = ypInfos.toArray();
                 this.events = events.toArray();
@@ -90,7 +86,7 @@ class YPWatcher {
 function get(url: string) {
     return new Promise<string>((resolve, reject) => {
         http.get(url, (res: http.ClientResponse) => {
-            var body = '';
+            let body = '';
             res.setEncoding('utf8');
             res.on('data', (chunk: string) => {
                 body += chunk;

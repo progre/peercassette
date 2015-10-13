@@ -1,5 +1,4 @@
-import channelsfactory = require('./channelsfactory');
-import Channel = require('./channel');
+import * as channelsfactory from '../entity/channelsfactory';
 
 export function url() {
     return 'http://eventyp.xrea.jp/index.txt';

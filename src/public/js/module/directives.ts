@@ -1,12 +1,12 @@
-﻿declare var Silverlight: any;
-declare var swfobject: any;
+﻿declare const Silverlight: any;
+declare const swfobject: any;
 
-var transitionOption = ' 1.25s';
-var dummyStyle = 'width: 100%; background-color: #333;';
-var playerStyle = 'position: absolute; display: block;';
+const transitionOption = ' 1.25s';
+const dummyStyle = 'width: 100%; background-color: #333;';
+const playerStyle = 'position: absolute; display: block;';
 
 // dummyはプラグインを置く領域のサイズを測ったりするのに必要
-export var player = () => Player.directive;
+export const player = () => Player.directive;
 
 class Player {
     static directive = {
@@ -31,11 +31,11 @@ class Player {
     }
 
     resize() {
-        var pluginLoaded = this.plugin != null;
-        var videoWidth = pluginLoaded ? this.plugin.videoWidth() : 4;
-        var videoHeight = pluginLoaded ? this.plugin.videoHeight() : 3;
-        var width = this.dummy.width();
-        var newHeight = width * videoHeight / videoWidth;
+        let pluginLoaded = this.plugin != null;
+        let videoWidth = pluginLoaded ? this.plugin.videoWidth() : 4;
+        let videoHeight = pluginLoaded ? this.plugin.videoHeight() : 3;
+        let width = this.dummy.width();
+        let newHeight = width * videoHeight / videoWidth;
         this.dummy.height(newHeight);
         if (pluginLoaded) {
             this.plugin.setSize(width, newHeight);
@@ -84,13 +84,13 @@ class FlashPlugin implements IPlugin {
     }
 
     attach() {
-        var id = '_player_' + Date.now();
+        let id = '_player_' + Date.now();
         this.element.prepend('<div id="' + id + '">');
 
-        var localIp = this.attrs['localip'];
-        var streamId = this.attrs['streamid'];
-        var remoteIp = this.attrs['remoteip'];
-        var top = this.dummy.position().top + 1;
+        let localIp = this.attrs['localip'];
+        let streamId = this.attrs['streamid'];
+        let remoteIp = this.attrs['remoteip'];
+        let top = this.dummy.position().top + 1;
         return FlashPlugin.embedSWF(id, { localIp: localIp }, streamId, remoteIp, top)
             .then(result => {
                 this.objectElem = result.element;
@@ -112,8 +112,8 @@ class FlashPlugin implements IPlugin {
         this.objectElem.height = height.toString();
     }
 
-    private static embedSWF(id: string, flashvars: any, streamId: string, remoteIp: string, top: number): Promise<any> {
-        var params = {
+    private static embedSWF(id: string, flashlets: any, streamId: string, remoteIp: string, top: number): Promise<any> {
+        let params = {
             menu: 'false',
             scale: 'noScale',
             allowFullscreen: 'true',
@@ -121,28 +121,28 @@ class FlashPlugin implements IPlugin {
             bgcolor: '',
             wmode: 'direct' // can cause issues with FP settings & webcam
         };
-        var attributes = {
+        let attributes = {
             id: id,
             style: playerStyle + ' top: ' + top + 'px'
         };
-        var loadedKey = id + '_loaded';
-        flashvars['loaded'] = loadedKey;
-        var dimensionChangedKey = id + '_dimension_changed';
-        flashvars['dimensionChanged'] = dimensionChangedKey;
+        let loadedKey = id + '_loaded';
+        flashlets['loaded'] = loadedKey;
+        let dimensionChangedKey = id + '_dimension_changed';
+        flashlets['dimensionChanged'] = dimensionChangedKey;
         return new Promise((resolve, reject) => {
             (<any>window)[loadedKey] = () => {
-                var objectElement = (<any>window)[id] || (<any>document)[id];
+                let objectElement = (<any>window)[id] || (<any>document)[id];
                 objectElement.play(streamId, remoteIp);
             };
             (<any>window)[dimensionChangedKey] = function (width: number, height: number) {
-                var objectElement = (<any>window)[id] || (<any>document)[id];
+                let objectElement = (<any>window)[id] || (<any>document)[id];
                 resolve({ element: objectElement, width: width, height: height });
             };
             swfobject.embedSWF(
                 '/plugin/flvplayer.swf',
                 id, '100%', '0', '10.0.0',
                 '/plugin/expressInstall.swf',
-                flashvars, params, attributes);
+                flashlets, params, attributes);
         });
     }
 }
@@ -227,7 +227,7 @@ class SilverlightPlugin implements IPlugin {
             {
                 onError: () => console.error('Error on Silverlight'),
                 onLoad: (sl: any, args: any) => {
-                    var ctrler = sl.Content.Controller;
+                    let ctrler = sl.Content.Controller;
                     ctrler.addEventListener('click', onClick);
                     ctrler.addEventListener('mediaOpened', () => onMediaOpen(ctrler.width, ctrler.height));
                     ctrler.LocalIp = localIp;
@@ -241,14 +241,14 @@ class SilverlightPlugin implements IPlugin {
     }
 }
 
-export var channelList = () => ({
+export let channelList = () => ({
     restrict: 'E',
     replace: true,
     templateUrl: '/html/list.html'
 });
 
 function setOnResize(onResize: Function) {
-    var timer: number = null;
+    let timer: NodeJS.Timer = null;
     $(window).resize(function () {
         if (timer != null) {
             clearTimeout(timer);

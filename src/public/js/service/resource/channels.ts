@@ -1,16 +1,15 @@
-﻿import log4js = require('log4js');
-import Enumerable = require('linq');
-import express = require('express');
-import functions = require('../infrastructure/functions');
-import YPWatcher = require('../infrastructure/ypwatcher');
-
-var logger = log4js.getLogger('server');
+﻿import {getLogger} from 'log4js';
+const logger = getLogger('server');
+import * as Enumerable from 'linq';
+import * as express from 'express';
+import * as functions from '../../infrastructure/functions';
+import YPWatcher from '../../infrastructure/ypwatcher';
 
 // classにしたいけど、thisが上手く作用しないので無理
 export function controller(ypWatcher: YPWatcher) {
     return {
         index: (req: express.Request, res: express.Response) => {
-            var channels = Enumerable.from(ypWatcher.channels)
+            let channels = Enumerable.from(ypWatcher.channels)
                 .select(x => {
                     if (x.name.indexOf('(要帯域チェック)') >= 0) {
                         x = x.clone();
@@ -23,7 +22,8 @@ export function controller(ypWatcher: YPWatcher) {
                     }
                     return x;
                 });
-            functions.requirePortConnectable(req,
+            functions.requirePortConnectable(
+                req,
                 () => {
                     logger.debug('チャンネル数: ' + channels.count());
                     res.send({
@@ -37,7 +37,7 @@ export function controller(ypWatcher: YPWatcher) {
                     res.send({
                         portConnectable: false,
                         channels: channels.select(x => {
-                            var channel = x.clone();
+                            let channel = x.clone();
                             channel.id = '00000000000000000000000000000000';
                             channel.ip = '';
                             if (channel.bandType !== '' && channel.bandType !== 'Free') {
@@ -51,15 +51,17 @@ export function controller(ypWatcher: YPWatcher) {
                         ypInfos: ypWatcher.ypInfos,
                         events: ypWatcher.events
                     });
-                }, () => {
+                },
+                () => {
                     res.send(500);
                 });
         },
         show: (req: express.Request, res: express.Response) => {
-            functions.requirePortConnectable(req,
+            functions.requirePortConnectable(
+                req,
                 () => {
-                    var id = req.params.channel;
-                    var channel = Enumerable.from(ypWatcher.channels)
+                    let id = req.params.channel;
+                    let channel = Enumerable.from(ypWatcher.channels)
                         .where(x => x.id === id)
                         .firstOrDefault();
                     if (channel == null) {
@@ -73,7 +75,8 @@ export function controller(ypWatcher: YPWatcher) {
                 },
                 () => {
                     res.send({ portConnectable: false });
-                }, () => {
+                },
+                () => {
                     res.send(500);
                 });
         }

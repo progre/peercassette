@@ -1,9 +1,8 @@
-﻿import channelsfactory = require('./channelsfactory');
-import Channel = require('./channel');
-import log4js = require('log4js');
+﻿import * as channelsfactory from '../entity/channelsfactory';
+import * as log4js from 'log4js';
 
-var osirase = 'TPからのお知らせ◆お知らせ';
-var upload = 'Temporary yellow Pages◆アップロード帯域';
+const osirase = 'TPからのお知らせ◆お知らせ';
+const upload = 'Temporary yellow Pages◆アップロード帯域';
 
 export function url(localPort: number) {
     if (localPort === 8080) {
@@ -13,10 +12,10 @@ export function url(localPort: number) {
 }
 
 export function getChannels(body: string) {
-    var list = channelsfactory.fromIndexTxt(body, 'TP')
+    let list = channelsfactory.fromIndexTxt(body, 'TP')
     // Free, Open, Over, 3Mbps Overを取り出す。descからは削除
         .select(channel => {
-            var r = channel.desc.match(/(?: - )?<(.*)>$/);
+            let r = channel.desc.match(/(?: - )?<(.*)>$/);
             if (r == null) {
                 channel.bandType = '';
                 return channel;

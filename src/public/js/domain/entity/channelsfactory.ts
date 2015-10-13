@@ -1,5 +1,5 @@
-﻿import Enumerable = require('linq');
-import Channel = require('./channel');
+﻿import * as Enumerable from 'linq';
+import Channel from './channel';
 
 export function fromIndexTxt(body: string, yp: string) {
     return Enumerable.from(body.split('\n'))
@@ -22,7 +22,7 @@ export function fromIndexTxt(body: string, yp: string) {
                 creator: entries[10],
                 album: entries[11],
                 title: entries[12],
-                url: entries[13],
+                url: entries[13]
             },
             hoursMinToMin(entries[15]),
             entries[17],
@@ -33,7 +33,7 @@ export function fromIndexTxt(body: string, yp: string) {
 }
 
 function hoursMinToMin(hmm: string) {
-    var nums = hmm.split(':').map(x=> parseInt(x, 10));
+    let nums = hmm.split(':').map(x => parseInt(x, 10));
     return nums[0] * 60 + nums[1];
 }
 
@@ -45,7 +45,7 @@ function unparseSpecialLetter(str: string) {
 }
 
 function getCategory(genre: string, desc: string) {
-    var filters = [
+    let filters = [
         { category: 'Adult', regex: /18x|x18|r-18|18禁/i },
         { category: 'Creating', regex: /お絵かき|oekaki|模型/i },
         { category: 'Shogi', regex: /将棋/i },
@@ -59,29 +59,29 @@ function getCategory(genre: string, desc: string) {
         { category: 'Game/RPG', regex: /rpg|ff|えふえふ|dq|ドラクエ|テイルズオブ|ドラゴンクエスト|ポケモン/i },
         { category: 'Game/Social', regex: /social|艦これ|パズドラ|モバマス/i },
     ];
-    var filters2 = [
+    let filters2 = [
         { category: 'Game/Other', regex: /game|ゲーム|ps/i }
     ];
-    for (var i = 0, len = filters.length; i < len; i++) {
-        var filter = filters[i];
+    for (let i = 0, len = filters.length; i < len; i++) {
+        let filter = filters[i];
         if (filter.regex.test(genre)) {
             return filter.category;
         }
     }
-    for (var i = 0, len = filters.length; i < len; i++) {
-        var filter = filters[i];
+    for (let i = 0, len = filters.length; i < len; i++) {
+        let filter = filters[i];
         if (filter.regex.test(desc)) {
             return filter.category;
         }
     }
-    for (var i = 0, len = filters2.length; i < len; i++) {
-        var filter = filters2[i];
+    for (let i = 0, len = filters2.length; i < len; i++) {
+        let filter = filters2[i];
         if (filter.regex.test(genre)) {
             return filter.category;
         }
     }
-    for (var i = 0, len = filters2.length; i < len; i++) {
-        var filter = filters2[i];
+    for (let i = 0, len = filters2.length; i < len; i++) {
+        let filter = filters2[i];
         if (filter.regex.test(desc)) {
             return filter.category;
         }

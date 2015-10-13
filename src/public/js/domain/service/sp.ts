@@ -1,19 +1,18 @@
-﻿import channelsfactory = require('./channelsfactory');
-import Channel = require('./channel');
+﻿import * as channelsfactory from '../entity/channelsfactory';
 
-var osirase = /^SP ※お知らせ/;
-var upload = 'SP◆アップロード帯域';
-var portDenied = 'SP◆ポート未開放';
+const osirase = /^SP ※お知らせ/;
+const upload = 'SP◆アップロード帯域';
+const portDenied = 'SP◆ポート未開放';
 
 export function url(localPort: number) {
     return 'http://bayonet.ddo.jp/sp/index.txt?port=' + localPort;
 }
 
 export function getChannels(body: string) {
-    var list = channelsfactory.fromIndexTxt(body, 'TP')
+    let list = channelsfactory.fromIndexTxt(body, 'TP')
     // Free, Open, Over, 3Mbps Overを取り出す。descからは削除
         .select(channel => {
-            var r = channel.desc.match(/(?: - )<(.*)>$/);
+            let r = channel.desc.match(/(?: - )<(.*)>$/);
             if (r == null) {
                 channel.bandType = '';
                 return channel;

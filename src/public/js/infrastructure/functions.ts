@@ -1,18 +1,16 @@
-var Promise: PromiseClass = require('es6-promise').Promise;
-import http = require('http');
-import express = require('express');
-import log4js = require('log4js');
-
-var logger = log4js.getLogger('server');
+import * as http from 'http';
+import * as express from 'express';
+import {getLogger} from 'log4js';
+const logger = getLogger('server');
 
 export function requirePortConnectable(req: express.Request, onConnectable: Function, onUnconnectable: Function, onError: Function) {
-    var session: any = (<any>req).session;
+    let session: any = (<any>req).session;
     if (session.portConnectable) {
         onConnectable();
         return;
     }
-    var ip = req.headers['x-forwarded-for'] || req.ip;
-    var port = session.port || 7144;
+    let ip = req.headers['x-forwarded-for'] || req.ip;
+    let port = session.port || 7144;
     logger.debug(ip + ':' + port + 'のポート開放状況は不明です');
     checkPort(ip, port)
         .then(val => {
@@ -33,7 +31,8 @@ export function requirePortConnectable(req: express.Request, onConnectable: Func
 
 function checkPort(ip: string, port: number) {
     return new Promise<boolean>((resolve, reject) => {
-        http.get('http://' + ip + ':' + port,
+        http.get(
+            'http://' + ip + ':' + port,
             () => {
                 resolve(true);
             }).on('error', () => {

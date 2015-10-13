@@ -1,14 +1,11 @@
-﻿import CookieInfrastructure = require('../../infrastructure/cookieinfrastructure');
-import UserInfo = require('../entity/userinfo');
+﻿import CookieInfrastructure from '../../infrastructure/cookieinfrastructure';
+import UserInfo from '../entity/userinfo';
 
-export = UserInfoRepos;
-class UserInfoRepos {
+export default class UserInfoRepos {
     constructor(private cookieIs: CookieInfrastructure) {
     }
 
     get() {
-        // ログインしていればセッションから、していなければクッキーから取得する
-        // ログイン実装してないけどな！
         return new UserInfo(this.cookieIs.getSet('favoriteChannels'));
     }
 

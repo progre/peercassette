@@ -1,5 +1,4 @@
-export = CookieInfrastructure;
-class CookieInfrastructure {
+export default class CookieInfrastructure {
     constructor(private $cookie: any) {
     }
 
@@ -17,7 +16,7 @@ class CookieInfrastructure {
 }
 
 function toString(set: Set<string>) {
-    var list: string[] = [];
+    let list: string[] = [];
     set.forEach(item => {
         list.push(item);
     });
@@ -25,8 +24,8 @@ function toString(set: Set<string>) {
 }
 
 function toSet(cookie: string) {
-    var set = new Set<string>();
-    var list: string[];
+    let set = new Set<string>();
+    let list: string[];
     try {
         list = JSON.parse(cookie);
     } catch (e) {

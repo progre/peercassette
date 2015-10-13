@@ -1,17 +1,16 @@
 ﻿/// <reference path="typings.d.ts"/>
-declare var Silverlight: any;
-import IndexCtrler = require('./module/indexctrler');
-import PlayerCtrler = require('./module/playerctrler');
-import directives = require('./module/directives');
+declare const Silverlight: any;
+import * as IndexCtrler from './module/indexctrler';
+import * as PlayerCtrler from './module/playerctrler';
+import * as directives from './module/directives';
 
-var root = '/';
+const root = '/';
 
-var app = angular.module('app', ['ngRoute', 'ngAnimate', 'ngCookies']);
+const app = angular.module('app', ['ngRoute', 'ngAnimate', 'ngCookies']);
 
 app.config([
     '$routeProvider', '$locationProvider', '$sceDelegateProvider',
     ($routeProvider: ng.route.IRouteProvider, $locationProvider: ng.ILocationProvider, $sceDelegateProvider: ng.ISCEDelegateProvider) => {
-        $locationProvider.html5Mode(true);
         $routeProvider
             .when(root, {
                 templateUrl: root + 'html/index.html', controller: 'IndexCtrler'
@@ -22,7 +21,7 @@ app.config([
             }).otherwise({
                 templateUrl: root + 'html/404.html'
             });
-        $sceDelegateProvider.resourceUrlWhitelist(['self', 'http:**']);// iframeのクロスドメイン許可
+        $sceDelegateProvider.resourceUrlWhitelist(['self', 'http:**']); // iframeのクロスドメイン許可
     }
 ]);
 

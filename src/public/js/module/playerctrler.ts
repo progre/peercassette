@@ -1,18 +1,18 @@
-﻿import directives = require('./directives');
-import CookieInfrastructure = require('../infrastructure/cookieinfrastructure');
-import UserInfoRepos = require('../domain/repos/userinforepos');
+﻿import * as directives from './directives';
+import CookieInfrastructure from '../infrastructure/cookieinfrastructure';
+import UserInfoRepos from '../domain/repos/userinforepos';
 
 export = PlayerCtrler;
 var PlayerCtrler = [
     '$scope', '$routeParams', '$cookies', '$http',
     ($scope: any, $routeParams: any, $cookies: any, $http: ng.IHttpService) => {
-        var userInfoRepos = new UserInfoRepos(new CookieInfrastructure($cookies));
-        var userInfo = userInfoRepos.get();
+        let userInfoRepos = new UserInfoRepos(new CookieInfrastructure($cookies));
+        let userInfo = userInfoRepos.get();
         $scope.localIp = '127.0.0.1:' + ($cookies.localPort || 7144);
 
         $http.get('/api/1/search?name=' + $routeParams.name)
             .then(res => {
-                var result = <any>res.data;
+                let result = <any>res.data;
                 if (!result.portConnectable) {
                     return;
                 }
@@ -23,7 +23,7 @@ var PlayerCtrler = [
                 return $http.get('/api/1/channels/' + $scope.streamId)
             })
             .then(res => {
-                var channel = (<any>res.data).channel;
+                let channel = (<any>res.data).channel;
                 $scope.name = channel.name;
 
                 // お気に入り
@@ -39,7 +39,7 @@ var PlayerCtrler = [
                     $scope.favorite = false;
                 };
 
-                var url = getMobileView(channel.url);
+                let url = getMobileView(channel.url);
                 angular.element('aside').append(getThreadViewerElement(url));// iframeを読み込み時に仕込んでおくとヒストリを汚してしまう為、動的に追加する
             }).catch(reason => {
                 console.error(reason);
@@ -60,8 +60,8 @@ function getThreadViewerElement(url: string) {
 
 function getMobileView(url: string) {
     // したらばはliteで表示する
-    var shiPattern = 'http://jbbs\\.(?:shitaraba\\.net|livedoor\\.jp)';
-    var result: string[];
+    let shiPattern = 'http://jbbs\\.(?:shitaraba\\.net|livedoor\\.jp)';
+    let result: string[];
     result = url.match(new RegExp(shiPattern + '/bbs/read.cgi/(.*)'));
     if (result != null) {
         return 'http://jbbs.shitaraba.net/bbs/lite/read.cgi/' + result[1];
